@@ -1,37 +1,29 @@
-print ('радиус окружности в сантиметрах')
-r = int
-r = input()
+from math import pi, sqrt
+r = input('радиус окружности в сантиметрах')
+
 
    
 
-c = int
-c =  (2*int(r)*3,14)
-print(str(c) + 'длина окружности в сантиметрах') 
-cm = int /100
-print(str(c) + 'длина окружности в метрах')
+cr =  (int(r) * 2 * pi)
+print(str(cr) + 'длина окружности в сантиметрах') 
+cm = cr / 100
+print(str(cm) + 'длина окружности в метрах')
 
-so = int
-so = (3,14*int(r)**2)
-print(str(so) + 'площадь окружности в метрах')
-som = int
-som = int(so) / 10000
+so = (pi*int(r)**2)
+print(str(so) + 'площадь окружности в сантиметрах')
+som = so / 10000
+print(str(som) + 'площадь окружности в метрах')
 
-avk = int
-avk = (int(r)*2**0,5)
+avk = (int(r)*sqrt(2))
 print(str(avk) + 'длина квадрата вписанного в окружность в сантиметрах' )
-avt = int
-avt = (int(r)*1,73)
+avt = (int(r)*sqrt(3))
 print(str(avt) + 'длина треугольника вписанного в окружность в сантиметрах' )
  
-aok = int
 aok = (2*int(r))
 print(str(aok) + 'длинна квадрата около которого описана окружность ')
-aot = int
-aok = (2*int(r)*1,73)
+aot = (2*int(r)*sqrt(3))
 print(str(aot) + 'площадь треугольника ')
     
-aw = int
-aw = (2*int(r))*((2**0,5)-1)
+aw = (2*int(r))*(sqrt(2)- 1)
 print(str(aw) + "длина описаного восьмиугольника")
     
-print('неправильное значение')
