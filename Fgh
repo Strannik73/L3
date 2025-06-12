@@ -1,0 +1,20 @@
+def compute_expression(a, b):
+    numerator = (a - b) ** 3
+    denominator = (a - b) ** 2
+    if denominator == 0:
+        return "Деление на ноль невозможно"
+    result = (numerator / denominator) ** 0.5
+    return result
+
+# Ввод данных вручную
+try:
+    a_input = input("Введите значение a: ")
+    b_input = input("Введите значение b: ")
+    
+    a = float(a_input)
+    b = float(b_input)
+    
+    result = compute_expression(a, b)
+    print(f"Результат: {result}")
+except ValueError:
+    print("Некорректный ввод. Пожалуйста, введите числовое значение.")
