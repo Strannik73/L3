@@ -1,0 +1,219 @@
+:root {
+    --primary-color: #E1EDE6;
+    --main-font: "Raleway", sans-serif;
+    --main-font-size: 20px;
+    --main-font-color: #2C2D35;
+    --green-font-color: #598D66;
+    --grey-font-color: #86928B;
+    --medium-font-size: 18px;
+    --white-color: #f4f6f5
+}
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: var(--main-font);
+    color: var(--main-font-color);
+    font-weight: 500;
+    background-color: var(--white-color);
+}
+a, button {
+    font-family: var(--main-font);
+}
+
+@media (min-width: 1440px) {
+    .container {
+        max-width: 1110px;
+        margin: 0 auto;
+    }
+    .header-main-links {
+        font-size: var(--main-font-size);
+    }
+    .about-title {
+        font-size: 60px;
+    }
+    .about-right {
+        width: 540px;
+    }
+    .h2{
+        font-size: 40px;
+    }
+    .work-item{
+        width: 310px;
+    }
+    .new-collection-title img {
+        width: 80px;
+        height: 80px;
+    }
+    .new-collection-title h2 {
+        width: 421px;
+    }
+    .new-collection-title p {
+        width: 540px;
+    }
+    .new-collection-title button {
+        padding: 21px 60px;
+    }
+    .team{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+    }
+    .time-info p{
+        width: 635px;
+        margin: 20px 0 ;
+    }
+    .time-info h2{
+        margin-top: 80px;
+    }
+}
+
+.header {
+    background-color: var(--primary-color);
+}
+.header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 33px 0 32px 0;
+}
+.header-link {
+    background: none;
+    border: none;
+}
+.header-link::after {
+    content: url(assets/buy.svg);
+}
+.header-main-links {
+    color: var(--main-font-color);
+    text-decoration: none;
+    margin-right: 60px;
+    font-weight: 500;
+}
+.header-info {
+    display: flex;
+    align-items: center;
+}
+.about {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.about-title {
+    font-weight: 500;
+}
+.about-title span {
+    color: #598D66;
+}
+.about-text {
+    color: var(--grey-font-color);
+    font-size: var(--medium-font-size);
+    margin: 20px 0 60px 0;
+}
+.about-button {
+    padding: 21px 61px;
+    color: var(--green-font-color);
+    font-size: var(--main-font-size);
+    background: none;
+    border: 1px solid var(--green-font-color);
+}
+.works-title{
+    font-weight: 500;
+}
+.works-button:nth-child(2){
+    margin: 0 32px;
+}
+.works-info{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 70px;
+    margin-bottom: 30px;
+}
+.works-button{
+    border:none;
+    background-color: #d4e8d9;
+    border-radius: 20px;
+    padding: 10px 20px; 
+    color: var(--main-font-color);
+    font-size: var(--main-font-size);
+}
+.works-button-active{
+    background-color: var(--green-font-color);
+    color:#f4f6f5
+}
+.work-item{
+    background-color: var(--primary-color);
+    padding:20px 20px 30px 20px;
+}
+.work-artist{
+    color: var(--grey-font-color);
+    font-size: var(--medium-font-size);
+    margin-top: 20px;
+    margin-bottom: 10px;
+
+}
+.work-name{
+    font-size: 30px;
+}
+.work-type{
+    font-size: var(--medium-font-size);
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+.work-price{
+    font-size: 24px;
+    color: var(--green-font-color)
+}
+.work-buy{
+    padding-left: 106px;
+    padding-right: 106px;
+    margin-top: 20px;
+
+}
+.works-list{
+    display: flex;
+    flex-wrap:wrap;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+#new-collection {
+    background-image: url(assets/pic_background.png);
+    padding: 70px 0;
+}
+.new-collection-title{
+    display: flex;
+    align-items: center;
+}
+.new-collection-title h2{
+    color: var(--white-color);
+    font-weight: var(--medium-font-weight);
+    padding-left: 20px;
+}
+.new-collection-info p {
+    color: #fff;
+    padding-bottom:10px ;
+    padding-top: 20px;
+    line-height: 150%;
+}
+.new-collection-info button {
+    border: none;
+    background-color: #eedb6d;
+    font-size: var(--main-font-size);
+    margin-top:50px ;
+}
+.time-info h2 {
+    font-weight: var(--medium-font-weight);
+}
+.team-info p {
+    font-size: var(--medium-font-size);
+    line-height: 150%;
+}
+.time-image:nth-child(2) {
+    margin: 0 30px;
+}
+.time{
+    padding: 70px 0;
+}
