@@ -1,0 +1,94 @@
+import random
+import tkinter as tk
+from tkinter import messagebox
+
+
+class SudokuApp(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("Судоку Сетка 9x9")
+        self._center_window()
+        self.sudoku_grid = SudokuGrid(self)
+        self.sudoku_grid.create_grid()
+
+        # Кнопка проверки
+        check_button = tk.Button(self, text="проверка",
+                                 command=self.check_sudoku)
+        check_button.grid(row=9, column=0, columnspan=9, pady=10)
+# расположение
+    def _center_window(self):
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+
+        percent_width = 0.2112
+        percent_height = 0.35
+
+        window_width = int(screen_width * percent_width)
+        window_height = int(screen_height * percent_height)
+
+        x = (screen_width - window_width) // 2
+        y = (screen_height - window_height) // 2
+        self.geometry(f"{window_width}x{window_height}+{x}+{y}")
+
+    def check_sudoku(self):
+        all_values = self.sudoku_grid.get_values()
+        for row in all_values:
+            print(row)
+        messagebox.showinfo("Проверка", "Значения получены, проверьте консоль!")
+
+
+class SudokuGrid:
+    def __init__(self, root):
+        self.root = root
+        self.cells = [[None for _ in range(9)] for _ in range(9)]
+# разбиение блоков по цвету 3*3*
+    def create_grid(self):
+        for r in range(9):
+            for c in range(9):
+                entry = tk.Entry(self.root, width=3, font=('Arial', 18),
+                                 justify='center')
+                entry.grid(row=r, column=c, padx=1, pady=1)
+                self.cells[r][c] = entry
+
+                if (r // 3 + c // 3) % 2 == 0:
+                    entry.config(bg='lightgray')
+                else:
+                    entry.config(bg='white')
+
+        self.rnd(count=15)
+     
+    def rnd(self, count=10):
+        positions = random.sample([(r, c)for r in range(9) for c in range(9)], count)
+        for (r, c) in positions:
+            num = random.randint(1,9)
+            self.cells[r][c].insert(0, str(num))
+            self.cells[r][c].comfig(state = 'disabled')
+
+    #     self._insert_random_numbers(count=15)  # например, 15 случайных чисел
+
+    # def _insert_random_numbers(self, count=10):
+    #     """Вставить случайные числа в случайные клетки"""
+    #     positions = random.sample([(r, c) for r in range(9) for c in range(9)], count)
+    #     for (r, c) in positions:
+    #         num = random.randint(1, 9)
+    #         self.cells[r][c].insert(0, str(num))
+    #         self.cells[r][c].config(state='disabled')  # запрет редактирования
+
+
+    def get_values(self):
+        values = []
+        for row in self.cells:
+            row_values = []
+            for entry in row:
+                val = entry.get()
+                if val.isdigit() and 1 <= int(val) <= 9:
+                    row_values.append(int(val))
+                else:
+                    row_values.append(0)
+            values.append(row_values)
+        return values
+
+
+if __name__ == "__main__":
+    app = SudokuApp()
+    app.mainloop()
