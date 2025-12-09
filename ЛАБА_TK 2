@@ -1,0 +1,285 @@
+import random
+import tkinter as tk
+from tkinter import messagebox
+import customtkinter as ctk
+
+BEIGE = "#f1e1c6"
+ORG = "#f8aa24"
+
+WINDOW_CLASSES = []
+
+class List(tk.Toplevel):
+    def __init__(self, root):
+        super().__init__(root)
+        self.title("Боковая панель")
+        self.configure(bg=BEIGE)
+
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+
+        percent_width = 0.15
+        percent_height = 0.55
+
+        window_width = int(screen_width * percent_width)
+        window_height = int(screen_height * percent_height)
+
+        root.update_idletasks()
+        main_x = root.winfo_x()
+        main_y = root.winfo_y()
+
+        offset = 10
+        x = main_x - window_width - offset
+        y = main_y
+
+        if x < 0:
+            x = offset
+
+        self.geometry(f"{window_width}x{window_height}+{x}+{y}")
+
+        tk.Label(self, text="Выберите аудио:").pack(pady=10)
+
+        ctk.CTkButton(self, text="1 СЛОЖНОСТЬ", command=lambda c=Main1: self.replace_main(root, c)).pack(anchor="w")
+        ctk.CTkButton(self, text="2 СЛОЖНОСТЬ", command=lambda c=Main2: self.replace_main(root, c)).pack(anchor="w")
+        ctk.CTkButton(self, text="3 СЛОЖНОСТЬ", command=lambda c=Main3: self.replace_main(root, c)).pack(anchor="w")
+        ctk.CTkButton(self, text="4 СЛОЖНОСТЬ", command=lambda c=Main4: self.replace_main(root, c)).pack(anchor="w")
+
+    def replace_main(self, root, new_main_class):
+        try:
+            if self.winfo_exists():
+                self.destroy()
+        except Exception:
+            pass
+        try:
+            root.destroy()
+        except Exception:
+            pass
+        new_app = new_main_class()
+        new_app.mainloop()
+
+
+class Sudoku(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("Судоку Сетка 9x9")
+        self.Main()
+        self.sudoku_grid = Bmain(self)
+        self.sudoku_grid.blocks()
+        self.config(bg='turquoise')
+
+        check_button = ctk.CTkButton(self, text="СЛОЖНОСТЬ",
+                        command=self.sudoku_otv)
+        check_button.grid(row=9, column=0, columnspan=9, pady=10, corner_radius=12, command=self.toggle_side_panel)
+
+        # Кнопка проверки
+        check_button = ctk.CTkButton(self, text="ПРОВЕРКА",
+                                command=self.sudoku_otv)
+        check_button.grid(row=9, column=0, columnspan=9, pady=10, corner_radius=12, command=self.toggle_side_panel)
+# расположение
+    def Main(self):
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+
+        percent_width = 0.32
+        percent_height = 0.6
+
+        window_width = int(screen_width * percent_width)
+        window_height = int(screen_height * percent_height)
+
+        x = (screen_width - window_width) // 2
+        y = (screen_height - window_height) // 2
+        self.geometry(f"{window_width}x{window_height}+{x}+{y}")
+        
+
+    def sudoku_otv(self):
+        all_values = self.sudoku_grid.val()
+        for row in all_values:
+            print(row)
+        result = logic_sudoku(all_values)
+        if result == "v":
+            messagebox.showinfo("Проверка", "решено правильно")
+
+        elif result == "0":
+            messagebox.showinfo("Проверка", "таблица не заполнена")
+        
+        else:
+            messagebox.showinfo("Проверка", "решено с ошибками")
+
+class Bmain:
+    def __init__(self, root):
+        self.root = root
+        self.cells = [[None for _ in range(9)] for _ in range(9)]
+
+# разбиение блоков по цвету 3*3*
+    def blocks(self):
+        for r in range(9):
+            for c in range(9):
+                entry = tk.Entry(self.root, width=2,   font=('Arial', 40),
+                                 justify='center')
+                entry.grid(row=r, column=c, padx=1, pady=1)
+                self.cells[r][c] = entry
+
+                if (r // 3 + c // 3) % 2 == 0:
+                    entry.config(bg='lightgray')
+                else:
+                    entry.config(bg='lightgray')
+
+        zadacha = generate_zadacha()
+        for r in range(9):
+            for c in range(9):
+                if zadacha[r][c] != 0:
+                    self.cells[r][c].insert(0, str(zadacha[r][c]))
+                    self.cells[r][c].config(state='disabled')
+
+    def val(self):
+        values = []
+        for row in self.cells:
+            row_values = []
+            for entry in row:
+                val = entry.get()
+                if val.isdigit() and 1 <= int(val) <= 9:
+                    row_values.append(int(val))
+                else:
+                    row_values.append(0)
+            values.append(row_values)
+        return values
+    
+def can_place(grid, row, col, num):
+    if num in grid[row]:
+        return False
+    if num in [grid[r][col] for r in range(9)]: 
+        return False
+    sr, sc = 3 * (row // 3), 3 * (col // 3)
+    for r in range(sr, sr + 3):
+        for c in range(sc, sc + 3):
+            if grid[r][c] == num: 
+                return False
+    return True
+    
+def resh(grid):
+    for r in  range(9):
+        for c in  range(9):
+            if grid[r][c] == 0:
+                nums = list(range(1, 10))
+                random.shuffle(nums)
+                for num in nums:
+                    if can_place(grid, r, c, num):
+                        grid[r][c] = num
+                        if resh(grid): 
+                            return True
+                        grid[r][c] = 0
+                return False
+    return True
+
+def blk(grid):
+    for k in range (0, 9, 3):
+        nums = list (range(1, 10))
+        random.shuffle(nums)
+        for i in range(3):
+            for j in range(3):
+                grid[k+i][k+j] = nums.pop()
+            
+def gener():
+    grid = [[0] * 9 for _ in range(9)]
+    blk(grid)
+    resh(grid)
+    return grid
+
+def generate_zadacha():
+    grid = gener()
+    cells_to_remove = random.sample(range(81), 61)
+    for idx in cells_to_remove:
+        r, c = divmod(idx, 9)
+        grid[r][c] = 0
+    return grid
+
+                
+def logic_sudoku(grid):
+
+    for row in grid:
+        num = [n for n in row if n != 0]
+        if len(num) != len(set(num)):
+            print("ошибка в строке")
+            return "x"
+    
+    for c in range(9):
+        col = [grid[r][c] for r in range(9) if grid[r][c] != 0]
+        if len(col) != len(set(col)):
+            print("ошибка в колонке")
+            return "x"
+        
+    for br in range(0, 9 ,3):
+        for bc in range(0, 9 ,3):
+            block = []
+            for r in range (br, br+3):
+                for c in range (bc, bc+3):
+                    if grid[r][c] != 0 :
+                        block.append(grid[r][c])
+            if len(block) != len(set(block)):
+                print('ошибка в блоке 3*3')
+                return "x"
+    
+    for  row  in grid:
+        if 0 in row:
+            print('сетка не заполнена ')
+            return "0"
+    return "v"
+
+
+
+class Main1(Bmain):
+    def __init__(self):
+        super().__init__("1 СЛОЖНОСТЬ", index=3)
+        
+    def generate_zadacha():
+        grid = gener()
+        cells_to_remove = random.sample(range(81), 30)
+        for idx in cells_to_remove:
+            r, c = divmod(idx, 9)
+            grid[r][c] = 0
+        return grid
+
+
+class Main2(Bmain):
+    def __init__(self):
+        super().__init__("2 СЛОЖНОСТЬ", index=3)
+        
+    def generate_zadacha():
+        grid = gener()
+        cells_to_remove = random.sample(range(81), 45)
+        for idx in cells_to_remove:
+            r, c = divmod(idx, 9)
+            grid[r][c] = 0
+        return grid
+
+
+class Main3(Bmain):
+    def __init__(self):
+        super().__init__("3 СЛОЖНОСТЬ", index=3)
+        
+    def generate_zadacha():
+        grid = gener()
+        cells_to_remove = random.sample(range(81), 61)
+        for idx in cells_to_remove:
+            r, c = divmod(idx, 9)
+            grid[r][c] = 0
+        return grid
+
+
+class Main4(Bmain):
+    def __init__(self):
+        super().__init__("4 СЛОЖНОСТЬ", index=3)
+        
+    def generate_zadacha():
+        grid = gener()
+        cells_to_remove = random.sample(range(81), 75)
+        for idx in cells_to_remove:
+            r, c = divmod(idx, 9)
+            grid[r][c] = 0
+        return grid
+
+
+WINDOW_CLASSES = [Main1, Main2, Main3, Main4]
+
+if __name__ == "__main__":
+    app = Main1()
+    app.mainloop()
