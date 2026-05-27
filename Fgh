@@ -18,3 +18,13 @@ try:
     print(f"Результат: {result}")
 except ValueError:
     print("Некорректный ввод. Пожалуйста, введите числовое значение.")
+
+====================================================================
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        const el = document.querySelector('.leaflet-bottom.leaflet-right');
+        if (el) el.remove();
+    }, 100); 
+});
+</script>
